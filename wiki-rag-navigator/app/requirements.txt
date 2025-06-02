@@ -1,0 +1,10 @@
+mariadb==1.1.7
+requests
+wikipedia-api
+sentence-transformers
+streamlit
+torch
+openai
+dotenv
+lxml-html-clean
+newspaper3k

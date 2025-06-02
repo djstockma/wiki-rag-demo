@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  mariadb:
+    image: mariadb:11.7
+    container_name: rag-mariadb
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: rootpass
+      MARIADB_DATABASE: ragdb
+      MARIADB_USER: raguser
+      MARIADB_PASSWORD: ragpass
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mariadb:/docker-entrypoint-initdb.d
+
+  app:
+    build: 
+      context: ./app
+    env_file:
+      - .env
+    container_name: wiki_checker
+    depends_on:
+      - mariadb
+    volumes:
+      - ./app:/app
+    working_dir: /app
+    ports:
+      - "8501:8501"
+    command: ["streamlit", "run", "app_ui.py", "--server.headless=true", "--server.runOnSave=false"]
+
